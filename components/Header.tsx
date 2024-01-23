@@ -1,11 +1,12 @@
 "use client";
-import { Popover, Transition } from "@headlessui/react";
+import { Dialog, Popover, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   ChatBubbleLeftIcon,
   PaperAirplaneIcon,
   PhoneIcon,
   PlayCircleIcon,
+  XMarkIcon,
 } from "@heroicons/react/16/solid";
 import { ChevronDownIcon, HomeIcon } from "lucide-react";
 import Link from "next/link";
@@ -147,10 +148,38 @@ function Header() {
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <a href="#" className=" text-sm font-semibold leading-6 text-white">
-            Login <span aria-hidden="true">&rrar;</span>
+            Login <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </nav>
+      <Dialog
+        as="div"
+        className="lg:hidden"
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+      >
+        <Dialog.Panel className="fixed inset-y-0 right-0 z-10  w-full overflow-y-auto bg-[#013894] px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <div className="flex items-center justify-between">
+            <a href="#" className="-m-1.5 p-1.5">
+              {" "}
+              <span className="sr-only"> Booking.com</span>
+              <img
+                className=" h-10 w-auto"
+                src="https://www.workingmums.co.uk/wp-content/uploads/2023/11/Booking_Com_Logotype_Aug2020_White_Blue-BG.png"
+                alt=""
+              />
+            </a>
+            <button
+              type="button"
+              className="-n-2.5 rounded-md p-2.5 text-white "
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <span className="sr-only">Close Menu</span>
+              <XMarkIcon className=" h-6 w-6" aria-hidden="true" />
+            </button>
+          </div>
+        </Dialog.Panel>
+      </Dialog>
     </header>
   );
 }
