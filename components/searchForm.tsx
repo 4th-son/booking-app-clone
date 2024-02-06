@@ -18,11 +18,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { BedDoubleIcon, CalendarIcon } from "lucide-react";
-import { Popover } from "@headlessui/react";
-import { PopoverTrigger } from "@radix-ui/react-popover";
-import { cn } from "@/lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
-const formSchema = z.object({
+import { cn } from "@/lib/utils";
+import { Calendar } from "./ui/calendar";
+
+export const formSchema = z.object({
   location: z.string().min(2).max(50),
   dates: z.object({
     from: z.date(),
@@ -61,7 +62,7 @@ function SearchForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className=" flex flex-col lg:flex-row  lg:max-w-6xl lg:mx-auto items-center space-x-0 justify-center space-y-4 lg:space-y-0 rounded-lg "
+        className=" flex flex-col lg:flex-row  lg:max-w-6xl lg:mx-auto items-center space-x-0 justify-center space-y-4 lg:space-y-0 rounded-lg lg:space-x-2 "
       >
         <div className="grid w-full lg:mx-w-sm items-center gap-1.5">
           <FormField
@@ -75,7 +76,11 @@ function SearchForm() {
                 </FormLabel>
                 <FormMessage />
                 <FormControl>
-                  <input placeholder="London uk" {...field} />
+                  <input
+                    placeholder="London uk"
+                    {...field}
+                    className=" w-full h-10 rounded-md p-5 border-slate-300 border"
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -98,7 +103,7 @@ function SearchForm() {
                         name="dates"
                         variant={"outline"}
                         className={cn(
-                          "w-[300px] justify-start text-left font-normal",
+                          "w-full lg:w-[300px] justify-start text-left font-normal",
                           !field.value.from && "text-muted-foreground"
                         )}
                       >
@@ -118,10 +123,75 @@ function SearchForm() {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
+                  <PopoverContent className=" w-auto p-0" align="start">
+                    <Calendar
+                      initialFocus
+                      mode="range"
+                      selected={field.value}
+                      defaultMonth={field.value.from}
+                      onSelect={field.onChange}
+                      numberOfMonths={2}
+                      disabled={(date) =>
+                        date < new Date(new Date().setHours(0, 0, 0, 0))
+                      }
+                    />
+                  </PopoverContent>
                 </Popover>
               </FormItem>
             )}
           />
+        </div>
+        <div className="flex w-full items-center space-x-2">
+          <div className="flex-1 grid items-center">
+            <FormField
+              control={form.control}
+              name="adults"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className=" text-white">Adults</FormLabel>
+                  <FormMessage />
+                  <FormControl>
+                    <Input type="number" placeholder="Adults" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex-1 grid items-center">
+            <FormField
+              control={form.control}
+              name="children"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className=" text-white">Children</FormLabel>
+                  <FormMessage />
+                  <FormControl>
+                    <Input type="number" placeholder="children" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex-1 grid items-center">
+            <FormField
+              control={form.control}
+              name="rooms"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className=" text-white">Rooms</FormLabel>
+                  <FormMessage />
+                  <FormControl>
+                    <Input type="number" placeholder="Rooms" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className=" mt-auto">
+            <Button className=" bg-blue-500 text-base" type="submit">
+              Search
+            </Button>
+          </div>
         </div>
       </form>
     </Form>
