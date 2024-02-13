@@ -16,4 +16,30 @@ export async function fetchResults(searchParams: SearchParams) {
     }
   });
   console.log("scrapping url >>>", url.href);
+
+const body ={
+  source: 'universal',
+  parse: true,
+  render: 'html',
+  parsing_instructions: {
+    listings: {
+      _fns: [
+        {
+          _fn: 'xpath',
+          _args: ["//@div[data-testid='property-card-container']"],
+        },
+      ],
+    },
+    total_listings: {
+      _fns: [
+        {
+          _fn: 'xpath_one',
+          _args: ['.//h1/text()'],
+        }
+      ]
+    }
+
+  }
+}
+
 }
